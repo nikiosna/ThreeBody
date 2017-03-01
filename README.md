@@ -1,4 +1,4 @@
 # ThreeBody
 newtonian n-body simulation in java
 
-test
+Used code from https://github.com/andern/jcoolib for the GUI.
