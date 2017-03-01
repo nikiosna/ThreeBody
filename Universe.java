@@ -35,6 +35,20 @@ public class Universe {
         return(new Body(body.getMass(), position,velocity));
     }
 
+    public Body betterIntegrator(MathVector force, Body body) {
+        if(body==null) return null;
+        MathVector acceleration_neu = force.divide(body.getMass());
+        MathVector velocity_neu;
+        if(body.getAcceleration()==null) {
+            velocity_neu = body.getVelocity().add(acceleration_neu.multiply(delta_t));
+        } else {
+            velocity_neu = body.getVelocity().add(body.getAcceleration().multiply(delta_t).add(acceleration_neu.subtract(body.getAcceleration()).multiply(0.5*delta_t)));
+        }
+
+        MathVector position_neu = body.getPosition().add(body.getVelocity().multiply(delta_t).add(velocity_neu.subtract(body.getVelocity()).multiply(0.5*delta_t)));
+        return(new Body(body.getMass(), position_neu,velocity_neu, acceleration_neu));
+    }
+
     /**
      * calculates the force on a body to n other bodies
      * @param z zentral body

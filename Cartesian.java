@@ -37,7 +37,7 @@ public class Cartesian extends JFrame {
 
     public void addPoint(CCPoint point) {
         s.lock.lock();
-        //if(s.points.size() > 5000) s.points.remove(0);
+        if(s.points.size() > 5000) s.points.remove(0);
         /*if(s.points.size() > 5000) {
             for (int i = 0; i < 200; i++) {
                 s.points.remove(0);

@@ -5,11 +5,17 @@ public class Body {
     private double mass;
     private MathVector position;
     private MathVector velocity;
+    private MathVector acceleration;
 
-    public Body(double mass, MathVector position, MathVector velocity) {
+    public Body(double mass, MathVector position, MathVector velocity, MathVector acceleration) {
         this.mass = mass;
         this.position = position;
         this.velocity = velocity;
+        this.acceleration = acceleration;
+    }
+
+    public Body(double mass, MathVector position, MathVector velocity) {
+        this(mass, position,velocity,null);
     }
 
     public double getMass() {
@@ -22,6 +28,10 @@ public class Body {
 
     public MathVector getVelocity() {
         return velocity;
+    }
+
+    public MathVector getAcceleration() {
+        return acceleration;
     }
 
     /**
