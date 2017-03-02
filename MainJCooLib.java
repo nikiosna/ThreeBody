@@ -14,26 +14,22 @@ public class MainJCooLib extends JFrame{
         double seconds = 5.0;
         double step = Unit.convert(seconds, new Unit(0,1,0), new Unit(0,1,0,149597870700.0,31536000.0,5.9722*Math.pow(10,24)));
         Universe universe = new Universe(2, step, new Unit(3,-2,-1,149597870700.0,31536000.0,5.9722*Math.pow(10,24)));
-        Body[] bodies = new Body[8];
-        Body[] bodies_Temp = new Body[8];
+        Body[] bodies = new Body[4];
+        Body[] bodies_Temp = new Body[4];
         MathVector x,v;
 
-        //Sonne
         x = new MathVector(5.0, 0.0);
         v = new MathVector(2.0, 0.5);
         bodies[0] = new Body(0.5*333000.0, x, v);
 
-        //Erde
         x = new MathVector(-1.0, 1.0);
         v = new MathVector(-3.277777053948402, 0.0);
         bodies[1] = new Body(333000.0, x, v);
 
-        //Jupiter
         x = new MathVector(0.0, -5.2);
         v = new MathVector(2.0, 2.5);
         bodies[2] = new Body(333000.0, x, v);
 
-        //Sonne
         x = new MathVector(-2.5, 2.5);
         v = new MathVector(-0.5, 0.0);
         bodies[3] = new Body(1.5*333000.0, x, v);
@@ -90,14 +86,6 @@ public class MainJCooLib extends JFrame{
                 System.out.println(Math.rint((time/max)*100) + "%");
             }
             if(time>=max) running=false;
-        }
-    }
-
-    public static void sleep(int time) {
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
