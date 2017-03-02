@@ -29,23 +29,23 @@ public class Universe {
     public Body badIntegrator(MathVector force, Body body) {
         //Todo improve the integrator with variable timesteps (eventually with the change of the acceleration)
         if(body==null) return null;
-        MathVector acceleration = force.divide(body.getMass());
-        MathVector velocity = body.getVelocity().add(acceleration.multiply(delta_t));
-        MathVector position = body.getPosition().add(body.getVelocity().multiply(delta_t));
+        MathVector acceleration = force/body.getMass();
+        MathVector velocity = body.getVelocity() + acceleration*delta_t;
+        MathVector position = body.getPosition() + body.getVelocity()*delta_t;
         return(new Body(body.getMass(), position,velocity));
     }
 
     public Body betterIntegrator(MathVector force, Body body) {
         if(body==null) return null;
-        MathVector acceleration_neu = force.divide(body.getMass());
+        MathVector acceleration_neu = force/body.getMass();
         MathVector velocity_neu;
         if(body.getAcceleration()==null) {
-            velocity_neu = body.getVelocity().add(acceleration_neu.multiply(delta_t));
+            velocity_neu = body.getVelocity() + acceleration_neu*delta_t;
         } else {
-            velocity_neu = body.getVelocity().add(body.getAcceleration().multiply(delta_t).add(acceleration_neu.subtract(body.getAcceleration()).multiply(0.5*delta_t)));
+            velocity_neu = body.getVelocity() + body.getAcceleration()*delta_t + (acceleration_neu - body.getAcceleration())*0.5*delta_t;
         }
 
-        MathVector position_neu = body.getPosition().add(body.getVelocity().multiply(delta_t).add(velocity_neu.subtract(body.getVelocity()).multiply(0.5*delta_t)));
+        MathVector position_neu = body.getPosition() + body.getVelocity()*delta_t + (velocity_neu - body.getVelocity())*0.5*delta_t;
         return(new Body(body.getMass(), position_neu,velocity_neu, acceleration_neu));
     }
 
@@ -63,18 +63,17 @@ public class Universe {
             if (bodies[0]==null || z == null) return MathVector.nullvector(d);
             if (z.equals(bodies[0])) return MathVector.nullvector(d);
             else {
-                MathVector r = bodies[0].getPosition().subtract(z.getPosition());
+                MathVector r = bodies[0].getPosition() - z.getPosition();
                 double abs = r.abs();
                 if(abs==0) throw new RuntimeException("ahh durch null teilen!");
                 double c = (G*z.getMass()*bodies[0].getMass())/(abs*abs*abs);
-                return(r.multiply(c));
+                return(r*c);
             }
         } else {
             for (int i = 0; i < bodies.length; i++) {
-                sum = sum.add(force(z, bodies[i]));
+                sum = sum.add( force(z, bodies[i]) );
             }
         }
-        //System.out.println(sum);
         return sum;
     }
 
@@ -88,8 +87,8 @@ public class Universe {
         if(bodies.length==1) {
             if (z.equals(bodies[0])) return 0;
             else {
-                double r = z.getPosition().subtract(bodies[0].getPosition()).abs();
-                if(r==0) throw new RuntimeException("ahh durch null teilen!");
+                double r = ( z.getPosition() - bodies[0].getPosition() ).abs();
+                if(r==0) throw new RuntimeException("divide by zero!");
                 return (G*bodies[0].getMass()*z.getMass())/r;
             }
         } else {
