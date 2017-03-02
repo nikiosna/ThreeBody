@@ -11,7 +11,7 @@ public class MainJCooLib extends JFrame{
     public static void main(String[] args) {
         Cartesian cartesian = new Cartesian(15.0);
 
-        double seconds = 5.0;
+        double seconds = 10.0;
         double step = Unit.convert(seconds, new Unit(0,1,0), new Unit(0,1,0,149597870700.0,31536000.0,5.9722*Math.pow(10,24)));
         Universe universe = new Universe(2, step, new Unit(3,-2,-1,149597870700.0,31536000.0,5.9722*Math.pow(10,24)));
         Body[] bodies = new Body[4];
@@ -22,12 +22,12 @@ public class MainJCooLib extends JFrame{
         v = new MathVector(2.0, 0.5);
         bodies[0] = new Body(0.5*333000.0, x, v);
 
-        x = new MathVector(-1.0, 1.0);
+        x = new MathVector(8.0, 3.0);
         v = new MathVector(-3.277777053948402, 0.0);
         bodies[1] = new Body(333000.0, x, v);
 
         x = new MathVector(0.0, -5.2);
-        v = new MathVector(2.0, 2.5);
+        v = new MathVector(2.0, 0.0);
         bodies[2] = new Body(333000.0, x, v);
 
         x = new MathVector(-2.5, 2.5);
@@ -36,7 +36,7 @@ public class MainJCooLib extends JFrame{
 
         boolean running = true;
         double time = 0;
-        double max = Math.rint(100.0/step);
+        double max = Math.rint(3.0/step);
         int out = (int)Math.rint(max/5000);
 
         double a,b;
@@ -44,6 +44,8 @@ public class MainJCooLib extends JFrame{
             for (int i = 0; i < bodies.length; i++) {
 
                 if(bodies[i] != null) {
+                    //real	0m0.259s
+                    //real	0m0.597s mit GUI
                     a = bodies[i].getPosition().getXi(0);
                     b = bodies[i].getPosition().getXi(1);
 
@@ -87,6 +89,7 @@ public class MainJCooLib extends JFrame{
             }
             if(time>=max) running=false;
         }
+        //System.exit(0);
     }
 
 }

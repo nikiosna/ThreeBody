@@ -58,11 +58,6 @@ public class MainGnuPlot3D {
 
                 bodies_Temp[i] = universe.badIntegrator( universe.force(bodies[i],bodies), bodies[i]);
 
-                /*String string = bodies[i].getPosition().toString();
-                if (string.contains("NaN") || string.contains("Infinity")) {
-                    running = false;
-                    System.out.println(i + " : " + string);
-                }*/
             }
 
             if((time%out)==0) {
@@ -79,51 +74,9 @@ public class MainGnuPlot3D {
 
         }
 
-        plot3d(toArray(x1), toArray(x2), toArray(x3), "plot3d", true);
-        plot3d(toArray(t), toArray(e), null, "energy3d", false);
+        GnuPlot.plot3d(x1, x2, x3, "plot3d");
+        GnuPlot.plot2d(t, e, "energy3d");
 
-    }
-
-    public static void plot3d(double[] x, double[] y, double[] z, String name, boolean a) {
-        JGnuplot jg = new JGnuplot() {
-            {
-                terminal = "pngcairo enhanced dashed";
-                output = name + ".png";
-            }
-        };
-        JGnuplot.Plot plot;
-        if (a) {
-            plot = new JGnuplot.Plot("") {
-                {
-                    xrange = "[-180000000000:180000000000]";
-                    yrange = "[-180000000000:180000000000]";
-                    xlabel = "x";
-                    ylabel = "y";
-                    zlabel = "z";
-                }
-            };
-            DataTableSet dts = plot.addNewDataTableSet("3D Plot");
-            dts.addNewDataTable("", x, y, z);
-            jg.execute(plot, jg.plot3d);
-        } else {
-            plot = new JGnuplot.Plot("") {
-                {
-                    xlabel = "Time";
-                    ylabel = "Energy";
-                }
-            };
-            DataTableSet dts = plot.addNewDataTableSet("2D Plot");
-            dts.addNewDataTable("", x, y);
-            jg.execute(plot, jg.plot2d);
-        }
-    }
-
-    public static double[] toArray(ArrayList<Double> list) {
-        double[] array = new double[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
-        }
-        return array;
     }
 
 }
