@@ -44,8 +44,7 @@ public class MainJCooLib extends JFrame{
             for (int i = 0; i < bodies.length; i++) {
 
                 if(bodies[i] != null) {
-                    //real	0m0.259s
-                    //real	0m0.597s mit GUI
+                    //real	0m0.597s mit GUI //real	0m0.259s
                     a = bodies[i].getPosition().getXi(0);
                     b = bodies[i].getPosition().getXi(1);
 
