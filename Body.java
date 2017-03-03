@@ -2,6 +2,7 @@
  * Created by niklas on 23.12.16.
  */
 public class Body {
+    private String name;
     private double mass;
     private MathVector position;
     private MathVector velocity;

@@ -1,0 +1,22 @@
+universe {
+    dimension 3
+    unit { //as factors to si
+        t
+        l
+        m
+    }
+}
+
+bodies {
+    body 1 {
+        name test
+        position 1.0 ; 1.0 ; 1.0
+        velocity 1.0 ; 1.0 ; 1.0
+    }
+
+    body 2 {
+        name test2
+        position 2.0 ; 2.0 ; 2.0
+        velocity 2.0 ; 2.0 ; 2.0
+    }
+}

@@ -1,4 +1,7 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Created by niklas on 03.03.17.
@@ -6,8 +9,8 @@ import java.io.File;
 public class FileManager {
     private static FileManager fm;
 
-    private File startParams;
-    private File output;
+    private File startParams; //idea: each file represents one body and contains 4 or 6 values (x and v vector)
+    private File[] output;
 
     private FileManager() {
         //TODO
@@ -20,7 +23,16 @@ public class FileManager {
     }
 
     public Body[] getStartBodys() {
-        //TODO
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(startParams));
+            String zeile = reader.readLine();
+            while(zeile != null){
+                //TODO parse strings
+                zeile = reader.readLine();
+            }
+        } catch (IOException e) {
+            System.exit(-1);
+        }
         return null;
     }
 
