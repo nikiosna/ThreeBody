@@ -1,24 +1,20 @@
 import cartesian.coordinate.CCPoint;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
-/**
- * Created by niklas on 23.12.16.
- */
 public class MainJCooLib extends JFrame{
 
     public static void main(String[] args) {
-        Cartesian cartesian = new Cartesian(15.0);
+        Cartesian cartesian = new Cartesian(20.0);
 
-        double seconds = 10.0;
+        double seconds = 300.0;
         double step = Unit.convert(seconds, new Unit(0,1,0), new Unit(0,1,0,149597870700.0,31536000.0,5.9722*Math.pow(10,24)));
         Universe universe = new Universe(2, step, new Unit(3,-2,-1,149597870700.0,31536000.0,5.9722*Math.pow(10,24)));
         Body[] bodies = new Body[4];
         Body[] bodies_Temp = new Body[4];
         MathVector x,v;
 
-        x = new MathVector(5.0, 0.0);
+        x = new MathVector(5.5, 0.0);
         v = new MathVector(2.0, 0.5);
         bodies[0] = new Body(0.5*333000.0, x, v);
 
@@ -36,7 +32,7 @@ public class MainJCooLib extends JFrame{
 
         boolean running = true;
         double time = 0;
-        double max = Math.rint(3.0/step);
+        double max = Math.rint(500.0/step);
         int out = (int)Math.rint(max/5000);
 
         double a,b;
@@ -48,10 +44,11 @@ public class MainJCooLib extends JFrame{
                     a = bodies[i].getPosition().getXi(0);
                     b = bodies[i].getPosition().getXi(1);
 
-                    int border = 250;
+                    int border = 2000;
                     if(a > border || a < -border || b > border || b < -border) {
                         bodies[i] = null;
                         System.out.println("bye");
+                        running=false;
                     }
 
                     if((time%out)==0) {

@@ -174,6 +174,7 @@ public class CCSystem extends JPanel {
      * respectively.
      */
     public CCSystem(double minX, double minY, double maxX, double maxY) {
+        //System.setProperty("sun.java2d.opengl", "true");
         this.minX = minX;
         this.minY = minY;
         this.maxX = maxX;

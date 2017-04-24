@@ -3,10 +3,6 @@ import cartesian.coordinate.CCPoint;
 import cartesian.coordinate.CCSystem;
 import cartesian.coordinate.CCLine;
 
-import java.awt.*;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 public class Cartesian extends JFrame {
 
     private static final long serialVersionUID = 1L;
@@ -37,7 +33,7 @@ public class Cartesian extends JFrame {
 
     public void addPoint(CCPoint point) {
         s.lock.lock();
-        if(s.points.size() > 5000) s.points.remove(0);
+        //if(s.points.size() > 10000) s.points.remove(0);
         /*if(s.points.size() > 5000) {
             for (int i = 0; i < 200; i++) {
                 s.points.remove(0);

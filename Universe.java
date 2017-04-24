@@ -65,7 +65,7 @@ public class Universe {
             else {
                 MathVector r = bodies[0].getPosition() - z.getPosition();
                 double abs = r.abs();
-                if(abs==0) throw new RuntimeException("ahh durch null teilen!");
+                if(abs==0) throw new RuntimeException("divide by zero!");
                 double c = (G*z.getMass()*bodies[0].getMass())/(abs*abs*abs);
                 return(r*c);
             }
