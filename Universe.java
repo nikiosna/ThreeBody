@@ -10,13 +10,12 @@ public class Universe {
     private  double G;
     private final double Gsi = 6.67408*Math.pow(10,-11); //Gravitational_constant m^3/(kg * s^2)
     private int d;
-
-    //TODO move bodys here
+    private Unit basis;
 
     public Universe(int dimension, double timesteps, Unit basis) {
         d = dimension;
         delta_t = timesteps;
-
+        this.basis = basis;
         G = Unit.convert(Gsi,new Unit(3,-2,-1), basis);
     }
 
@@ -32,7 +31,7 @@ public class Universe {
         MathVector acceleration = force/body.getMass();
         MathVector velocity = body.getVelocity() + acceleration*delta_t;
         MathVector position = body.getPosition() + body.getVelocity()*delta_t;
-        return(new Body(body.getMass(), position,velocity));
+        return(new Body(body.getMass(), position,velocity, body.getRadius()));
     }
 
     public Body betterIntegrator(MathVector force, Body body) {
@@ -46,7 +45,7 @@ public class Universe {
         }
 
         MathVector position_neu = body.getPosition() + body.getVelocity()*delta_t + (velocity_neu - body.getVelocity())*0.5*delta_t;
-        return(new Body(body.getMass(), position_neu,velocity_neu, acceleration_neu));
+        return(new Body(body.getMass(), position_neu,velocity_neu, acceleration_neu, body.getRadius()));
     }
 
     /**
@@ -78,6 +77,20 @@ public class Universe {
     }
 
     /**
+     * returns if body a and body b are collided
+     * @param a
+     * @param b
+     * @return true if a collision is detected
+     */
+    public boolean collision(Body a, Body b) {
+        if(a==b || a==null || b==null) return false;
+        double distance = (a.getPosition()-b.getPosition()).abs();
+        if(distance<0) distance *= -1;
+        //if(distance < Unit.convert(100000000.0, new Unit(1,0,0), basis.getOtherDimension(1,0,0))) System.out.println("nearby");
+        return(distance <= (a.getRadius()+b.getRadius()));
+    }
+
+    /**
      * calculates the energy of a body
      * @param z the body
      * @return energy in (kg*m*m)/(s*s)
@@ -97,6 +110,15 @@ public class Universe {
             }
         }
         return energy;
+    }
+
+    /**
+     * calculates the energy of a body
+     * @return energy in (kg*m*m)/(s*s)
+     */
+    public double kin_energy(Body b) {
+        double v = b.getVelocity().abs();
+        return 0.5*b.getMass()*v*v;
     }
 
 }

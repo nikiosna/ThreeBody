@@ -24,6 +24,10 @@ public class Unit {
         this(length_dimension, time_dimension, mass_dimension, 1.0, 1.0, 1.0);
     }
 
+    public Unit getOtherDimension(int length_dimension, int time_dimension, int mass_dimension) {
+        return new Unit(length_dimension, time_dimension, mass_dimension, this.length_factor_si, this.time_factor_si, this.mass_factor_si);
+    }
+
     public boolean equal_dimension(Unit a) {
         if(length_dimension != a.getLength_dimension())
             return false;
