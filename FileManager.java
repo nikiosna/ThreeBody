@@ -1,29 +1,43 @@
 import java.io.*;
+import java.math.BigInteger;
 
 /**
  * Created by niklas on 03.03.17.
  */
 public class FileManager {
-    private static FileManager fm;
+    private String path;
+    File[] file;
+    PrintWriter[] writer;
 
-    private File startParams;
-    private File[] output;
+    public FileManager(Body[] body) throws IOException {
+        path = "/home/niklas/ThreeBody/";
 
-    private FileManager() {
-        output = new File[1];
-        output[1] = new File("/home/niklas/test.txt");
-        //TODO
+        file = new File[body.length];
+        writer = new PrintWriter[body.length];
+        for (int i = 0; i < body.length; i++) {
+            file[i] = new File(path + body[i].getId() + ".lvm");
+            file[i].createNewFile();
+            writer[i] = new PrintWriter(file[i], "UTF-8");
+            writer[i].println("#t x1 x2 [x3]");
+        }
     }
 
-    public static FileManager getFileManager() {
-        if (fm == null)
-            fm = new FileManager();
-        return fm;
+
+    public void writeBodyPosition(Body[] body, BigInteger time) {
+        for (int i = 0; i < body.length; i++) {
+            writer[i].println(time + " " + body[i].getPosition());
+        }
+    }
+
+    public void close() {
+        for (int i = 0; i < writer.length; i++) {
+            writer[i].close();
+        }
     }
 
     public Body[] getStartBodys() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(startParams));
+            BufferedReader reader = new BufferedReader(new FileReader("TODO"));
             String zeile = reader.readLine();
             while (zeile != null) {
                 //TODO parse strings
@@ -35,20 +49,4 @@ public class FileManager {
         return null;
     }
 
-    private boolean writeString(String[] s) {
-        try {
-            PrintWriter writer = new PrintWriter(output[1], "UTF-8");
-            writer.println(s);
-            writer.close();
-        } catch (IOException e) {
-            return false;
-        }
-        return true;
-    }
-
-
-    public boolean writeBody(Body n) {
-        //TODO
-        return true;
-    }
 }

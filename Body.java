@@ -4,12 +4,14 @@
 public class Body {
     private String id;
     private double mass;
-    private MathVector position;
-    private MathVector velocity;
-    private MathVector acceleration;
+    //TODO make somehow private
+    public MathVector position;
+    public MathVector velocity;
+    public MathVector acceleration;
     private double radius;
 
-    public Body(double mass, MathVector position, MathVector velocity, MathVector acceleration, double radius) {
+    public Body(String id, double mass, MathVector position, MathVector velocity, MathVector acceleration, double radius) {
+        this.id = id;
         this.mass = mass;
         this.position = position;
         this.velocity = velocity;
@@ -17,16 +19,16 @@ public class Body {
         this.radius = radius;
     }
 
-    public Body(double mass, MathVector position, MathVector velocity, MathVector acceleration) {
-        this(mass, position, velocity, acceleration, 0);
+    public Body(String id, double mass, MathVector position, MathVector velocity, MathVector acceleration) {
+        this(id, mass, position, velocity, acceleration, 0);
     }
 
-    public Body(double mass, MathVector position, MathVector velocity, double radius) {
-        this(mass, position,velocity,null, radius);
+    public Body(String id, double mass, MathVector position, MathVector velocity, double radius) {
+        this(id, mass, position,velocity,null, radius);
     }
 
-    public Body(double mass, MathVector position, MathVector velocity) {
-        this(mass, position,velocity,null, 0);
+    public Body(String id, double mass, MathVector position, MathVector velocity) {
+        this(id, mass, position,velocity,null, 0);
     }
 
     public double getMass() {
@@ -48,5 +50,7 @@ public class Body {
     public double getRadius() {
         return radius;
     }
+
+    public String getId(){return id;}
 
 }

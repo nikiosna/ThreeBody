@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.math.BigInteger;
 
 /**
  * Created by niklas on 23.12.16.
@@ -6,46 +6,63 @@ import java.util.ArrayList;
 public class Universe {
 
     private double delta_t;
-    private double age; //TODO
+    private int delta_t_si;
+    private BigInteger age_si;
     private  double G;
     private final double Gsi = 6.67408*Math.pow(10,-11); //Gravitational_constant m^3/(kg * s^2)
     private int d;
     private Unit basis;
 
-    public Universe(int dimension, double timesteps, Unit basis) {
+    public Universe(int dimension, int timesteps_si, Unit basis) {
         d = dimension;
-        delta_t = timesteps;
         this.basis = basis;
+        delta_t = Unit.convert((double)timesteps_si, new Unit(0,1,0), basis.getOtherDimension(0,1,0));
+        age_si = BigInteger.ZERO;
+        delta_t_si = timesteps_si;
         G = Unit.convert(Gsi,new Unit(3,-2,-1), basis);
+    }
+
+    public BigInteger calculate_step(Body[] body) {
+        for (int i = 0; i < body.length; i++) {
+            betterIntegrator( force(body[i],body), body[i]);
+            aging();
+        }
+        return age_si;
     }
 
     /**
      * let a force acting on a body
      * @param force the force as a vector
      * @param body the patient body
-     * @return the new body with other velocities etc
      */
-    public Body badIntegrator(MathVector force, Body body) {
+    private void badIntegrator(MathVector force, Body body) {
         //Todo improve the integrator with variable timesteps (eventually with the change of the acceleration)
-        if(body==null) return null;
-        MathVector acceleration = force/body.getMass();
-        MathVector velocity = body.getVelocity() + acceleration*delta_t;
-        MathVector position = body.getPosition() + body.getVelocity()*delta_t;
-        return(new Body(body.getMass(), position,velocity, body.getRadius()));
+        if(body!=null) {
+            MathVector acceleration = force/body.getMass();
+            MathVector velocity = body.getVelocity() + acceleration*delta_t;
+            MathVector position = body.getPosition() + body.getVelocity()*delta_t;
+            body.position = position;
+            body.velocity = velocity;
+            body.acceleration = acceleration;
+        }
     }
 
-    public Body betterIntegrator(MathVector force, Body body) {
-        if(body==null) return null;
-        MathVector acceleration_neu = force/body.getMass();
-        MathVector velocity_neu;
-        if(body.getAcceleration()==null) {
-            velocity_neu = body.getVelocity() + acceleration_neu*delta_t;
-        } else {
-            velocity_neu = body.getVelocity() + body.getAcceleration()*delta_t + (acceleration_neu - body.getAcceleration())*0.5*delta_t;
-        }
+    private void betterIntegrator(MathVector force, Body body) {
+        if(body!=null) {
+            MathVector acceleration_neu = force/body.getMass();
+            MathVector velocity_neu;
+            if(body.getAcceleration()==null) {
+                velocity_neu = body.getVelocity() + acceleration_neu*delta_t;
+            } else {
+                velocity_neu = body.getVelocity() + body.getAcceleration()*delta_t + (acceleration_neu - body.getAcceleration())*0.5*delta_t;
+            }
 
-        MathVector position_neu = body.getPosition() + body.getVelocity()*delta_t + (velocity_neu - body.getVelocity())*0.5*delta_t;
-        return(new Body(body.getMass(), position_neu,velocity_neu, acceleration_neu, body.getRadius()));
+            MathVector position_neu = body.getPosition() + body.getVelocity()*delta_t + (velocity_neu - body.getVelocity())*0.5*delta_t;
+
+            body.position = position_neu;
+            body.velocity = velocity_neu;
+            body.acceleration = acceleration_neu;
+        }
     }
 
     /**
@@ -54,7 +71,7 @@ public class Universe {
      * @param bodies
      * @return
      */
-    public MathVector force(Body z, Body... bodies) {
+    private MathVector force(Body z, Body... bodies) {
         if(bodies.length==0) throw new RuntimeException("test");
 
         MathVector sum = MathVector.nullvector(d);
@@ -74,6 +91,10 @@ public class Universe {
             }
         }
         return sum;
+    }
+
+    private void aging() {
+        age_si  = age_si.add(BigInteger.valueOf(delta_t_si));
     }
 
     /**
@@ -119,6 +140,18 @@ public class Universe {
     public double kin_energy(Body b) {
         double v = b.getVelocity().abs();
         return 0.5*b.getMass()*v*v;
+    }
+
+    public double getDelta_t() {
+        return delta_t;
+    }
+
+    public int getDelta_t_si() {
+        return delta_t_si;
+    }
+
+    public BigInteger getAge_si() {
+        return age_si;
     }
 
 }
