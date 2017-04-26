@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         double[][] numbers = null;
         try {
-            numbers = FileManager.readFile(new File("/home/niklas/ThreeBody/1.lvm"));
+            numbers = FileManager.readFile(new File("/home/niklas/ThreeBody/1.lvm")).vectors;
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);

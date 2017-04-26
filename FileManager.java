@@ -52,7 +52,7 @@ public class FileManager {
         return null;
     }
 
-    public static double[][] readFile(File f) throws IOException {
+    public static DataSet readFile(File f) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(f));
         ArrayList<String> lines = new ArrayList<>();
         String zeile = reader.readLine();
@@ -76,7 +76,7 @@ public class FileManager {
                 }
             }
         }
-        return number;
+        return new DataSet(time, number);
     }
 
 }
