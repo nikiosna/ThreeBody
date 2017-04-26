@@ -59,15 +59,19 @@ public class MainJCooLib extends JFrame{
                     int border = 200;
                     if(a > border || a < -border || b > border || b < -border) {
                         System.out.println("#bye");
+                        file.writeComment("bye");
                         System.out.println("#Escapevelocity: " + Unit.convert(bodies[i].getVelocity().abs(), simulation_unit.getOtherDimension(1,-1,0), new Unit(1,-1,0)));
+                        file.writeComment("Escapevelocity: " + Unit.convert(bodies[i].getVelocity().abs(), simulation_unit.getOtherDimension(1,-1,0), new Unit(1,-1,0)));
                         bodies[i] = null;
                         running=false;
                     }
                     for (int j = 0; j < bodies.length; j++) {
                         if(universe.collision(bodies[i], bodies[j])) {
                             System.out.println("#collision");
+                            file.writeComment("collision");
                             MathVector velocity_difference = bodies[i].getVelocity()-bodies[j].getVelocity();
                             System.out.println("#relative speed: " + Unit.convert(velocity_difference.abs(), simulation_unit.getOtherDimension(1, -1, 0), new Unit(1, -1, 0)));
+                            file.writeComment("relative speed: " + Unit.convert(velocity_difference.abs(), simulation_unit.getOtherDimension(1, -1, 0), new Unit(1, -1, 0)));
                             running=false;
                             i=bodies.length;
                             j=bodies.length;

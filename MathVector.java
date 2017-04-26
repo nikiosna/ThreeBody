@@ -79,9 +79,10 @@ public class MathVector {
     @Override
     public String toString() {
         String a = "";
-        for (int i = 0; i < x.length; i++) {
+        for (int i = 0; i < x.length-1; i++) {
             a += x[i] + " ";
         }
+        a+=x[x.length-1];
         return a;
     }
 }
