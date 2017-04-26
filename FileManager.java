@@ -7,15 +7,18 @@ import java.util.ArrayList;
  */
 public class FileManager {
     private String path;
+    private String[] id;
     File[] file;
     PrintWriter[] writer;
 
     public FileManager(Body[] body) throws IOException {
         path = "/home/niklas/ThreeBody/";
 
+        id = new String[body.length];
         file = new File[body.length];
         writer = new PrintWriter[body.length];
         for (int i = 0; i < body.length; i++) {
+            id[i] = body[i].getId();
             file[i] = new File(path + body[i].getId() + ".lvm");
             file[i].createNewFile();
             writer[i] = new PrintWriter(file[i], "UTF-8");
@@ -30,10 +33,12 @@ public class FileManager {
         }
     }
 
-    public void writeComment(String s) {
-        for (int i = 0; i < writer.length; i++) {
-            writer[i].println("#" + s);
+    public void writeComment(String s, String body_id) {
+        int n = -1;
+        for (int i = 0; i < id.length; i++) {
+            if(body_id.equals(id[i])) n=i;
         }
+        writer[n].println("#" + s);
     }
 
     public void close() {

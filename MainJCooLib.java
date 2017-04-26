@@ -30,8 +30,8 @@ public class MainJCooLib extends JFrame{
 
         boolean running = true;
         double time = 0;
-        double max = Math.rint(500.0/universe.getDelta_t());
-        int out = (int)Math.rint(max/5000);
+        double max = Math.rint(250.0/universe.getDelta_t());
+        int out = (int)Math.rint(max/10000);
 
         FileManager file = null;
         try {
@@ -42,6 +42,10 @@ public class MainJCooLib extends JFrame{
         }
 
         double a,b;
+        boolean[] esacpe = new boolean[bodies.length];
+        for (int i = 0; i < esacpe.length; i++) {
+            esacpe[i] = false;
+        }
         while (running) {
 
             //the magic
@@ -58,20 +62,22 @@ public class MainJCooLib extends JFrame{
 
                     int border = 200;
                     if(a > border || a < -border || b > border || b < -border) {
-                        System.out.println("#bye");
-                        file.writeComment("bye");
-                        System.out.println("#Escapevelocity: " + Unit.convert(bodies[i].getVelocity().abs(), simulation_unit.getOtherDimension(1,-1,0), new Unit(1,-1,0)));
-                        file.writeComment("Escapevelocity: " + Unit.convert(bodies[i].getVelocity().abs(), simulation_unit.getOtherDimension(1,-1,0), new Unit(1,-1,0)));
-                        bodies[i] = null;
-                        running=false;
+                        if(!esacpe[i]){
+                            System.out.println("#bye");
+                            file.writeComment("bye", bodies[i].getId());
+                            System.out.println("#Escapevelocity: " + Unit.convert(bodies[i].getVelocity().abs(), simulation_unit.getOtherDimension(1,-1,0), new Unit(1,-1,0)));
+                            file.writeComment("Escapevelocity: " + Unit.convert(bodies[i].getVelocity().abs(), simulation_unit.getOtherDimension(1,-1,0), new Unit(1,-1,0)), bodies[i].getId());
+                        }
+                        esacpe[i]=true;
+                        //bodies[i] = null;//running=false;
                     }
                     for (int j = 0; j < bodies.length; j++) {
                         if(universe.collision(bodies[i], bodies[j])) {
                             System.out.println("#collision");
-                            file.writeComment("collision");
+                            file.writeComment("collision", bodies[i].getId());
                             MathVector velocity_difference = bodies[i].getVelocity()-bodies[j].getVelocity();
                             System.out.println("#relative speed: " + Unit.convert(velocity_difference.abs(), simulation_unit.getOtherDimension(1, -1, 0), new Unit(1, -1, 0)));
-                            file.writeComment("relative speed: " + Unit.convert(velocity_difference.abs(), simulation_unit.getOtherDimension(1, -1, 0), new Unit(1, -1, 0)));
+                            file.writeComment("relative speed: " + Unit.convert(velocity_difference.abs(), simulation_unit.getOtherDimension(1, -1, 0), new Unit(1, -1, 0)), bodies[i].getId());
                             running=false;
                             i=bodies.length;
                             j=bodies.length;
