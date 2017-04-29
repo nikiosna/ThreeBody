@@ -24,7 +24,7 @@ public class Universe {
 
     public BigInteger calculate_step(Body[] body) {
         for (int i = 0; i < body.length; i++) {
-            betterIntegrator( force(body[i],body), body[i]);
+            badIntegrator( force(body[i],body), body[i]);
             aging();
         }
         return age_si;
@@ -37,10 +37,12 @@ public class Universe {
      */
     private void badIntegrator(MathVector force, Body body) {
         //Todo improve the integrator with variable timesteps (eventually with the change of the acceleration)
+        //Todo note https://github.com/MatthewPeterKelly/myJavaPkgs/blob/master/mpk_dsc/Integrator.java
         if(body!=null) {
             MathVector acceleration = force/body.getMass();
             MathVector velocity = body.getVelocity() + acceleration*delta_t;
-            MathVector position = body.getPosition() + body.getVelocity()*delta_t;
+            //MathVector position = body.getPosition() + body.getVelocity()*delta_t; //euler
+            MathVector position = body.getPosition() + velocity*delta_t; //sympletic
             body.position = position;
             body.velocity = velocity;
             body.acceleration = acceleration;
@@ -64,6 +66,44 @@ public class Universe {
             body.acceleration = acceleration_neu;
         }
     }
+
+    private void heunIntegrator(MathVector force, Body body) {
+        if(body!=null) {
+            MathVector acceleration = force/body.getMass();
+            MathVector velocity = body.getVelocity() + acceleration*delta_t;
+            MathVector position = body.getPosition() + velocity*delta_t;
+            body.velocity = body.getVelocity() + acceleration*delta_t + acceleration*0.5*delta_t*delta_t;
+
+        }
+    }
+
+    private void rk4Integrator(MathVector force, Body body) {
+        if(body!=null) {
+            MathVector p1, p2, p3, p4;
+            MathVector v1, v2, v3, v4;
+            MathVector a1, a2, a3, a4;
+            p1 = body.getPosition();
+            v1 = body.getVelocity();
+            a1 = force/body.getMass();
+
+            p2 = p1 + v1*0.5*delta_t;
+            v2 = v1 + a1*0.5*delta_t;
+            a2 = a1; //TODO
+
+            p3 = p1 + v2*0.5*delta_t;
+            v3 = v1 + a2*0.5*delta_t;
+            a3 = a2; //TODO
+
+            p4 = p1 + v3*0.5*delta_t;
+            v4 = v1 + a3*0.5*delta_t;
+            a4 = a3; //TODO
+
+            body.position = p1 + (v1 + v2*2.0 + v3*2.0 + v4)*(delta_t/6.0);
+            body.velocity = v1 + (a1 + a2*2.0 + a3*2.0 + a4)*(delta_t/6.0);
+
+        }
+    }
+
 
     /**
      * calculates the force on a body to n other bodies

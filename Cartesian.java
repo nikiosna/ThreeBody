@@ -15,7 +15,7 @@ public class Cartesian extends JFrame {
         size = new double[] {a,b,c,d};
 
         setVisible(true);
-        setSize(800, 600);
+        setSize(1000, 1000);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         s = new CCSystem(a, b, c, d);

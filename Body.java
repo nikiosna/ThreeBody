@@ -7,7 +7,7 @@ public class Body {
     //TODO make somehow private
     public MathVector position;
     public MathVector velocity;
-    public MathVector acceleration;
+    public MathVector acceleration; //TODO remove
     private double radius;
 
     public Body(String id, double mass, MathVector position, MathVector velocity, MathVector acceleration, double radius) {
